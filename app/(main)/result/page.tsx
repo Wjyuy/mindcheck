@@ -1,7 +1,7 @@
 // app/(main)/result/page.tsx
 'use client'; // 클라이언트 컴포넌트로 지정
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react'; // Suspense 임포트
 import { useSearchParams, useRouter } from 'next/navigation'; // 쿼리 파라미터 및 라우팅을 위해 사용
 import { EmotionCategory, HealingMessage } from '@/types/project.d'; // 타입 임포트
 import healingMessagesData from '@/lib/data/healingMessages.json'; // 힐링 문구 데이터 임포트
@@ -53,10 +53,10 @@ declare global {
 }
 
 /**
- * 결과 페이지 컴포넌트
- * 심리테스트 결과를 표시하고, 힐링 문구를 추천하며, 공유 기능을 제공합니다.
+ * 실제 결과 페이지 내용을 렌더링하는 내부 컴포넌트.
+ * useSearchParams 훅을 사용하므로 Suspense 경계 내부에 있어야 합니다.
  */
-const ResultPage: React.FC = () => {
+const ResultContent: React.FC = () => {
   const searchParams = useSearchParams(); // URL 쿼리 파라미터 가져오기
   const router = useRouter(); // 라우터 훅 초기화
 
@@ -187,8 +187,6 @@ const ResultPage: React.FC = () => {
           setTimeout(() => setShareMessage(null), 3000);
         }
       } else if (platform === 'instagram') {
-        // 인스타그램은 직접 웹 공유 API가 없습니다.
-        // 일반적으로는 이미지 생성 후 사용자가 직접 업로드하도록 안내합니다.
         setShareMessage('인스타그램은 이미지 생성 후 수동 공유를 권장합니다. (기능 개발 예정)');
         setTimeout(() => setShareMessage(null), 5000);
       } else if (platform === 'facebook') {
@@ -272,7 +270,7 @@ const ResultPage: React.FC = () => {
           <Button
             variant="secondary"
             size="lg"
-            icon={Facebook} // Facebook 아이콘으로 변경
+            icon={Facebook}
             onClick={() => handleShare('facebook')}
             aria-label="페이스북으로 공유"
           >
@@ -300,6 +298,24 @@ const ResultPage: React.FC = () => {
         {/* 실제 AdSense 코드 삽입 위치 */}
       </div>
     </div>
+  );
+};
+
+/**
+ * 결과 페이지 컴포넌트
+ * useSearchParams 훅을 사용하는 ResultContent 컴포넌트를 Suspense로 감쌉니다.
+ * 이는 서버에서 페이지를 미리 렌더링할 때 발생하는 오류를 방지합니다.
+ */
+const ResultPage: React.FC = () => {
+  return (
+    <Suspense fallback={
+      <div className="flex flex-1 flex-col items-center justify-center text-center text-gray-700 dark:text-gray-300 min-h-[calc(100vh-160px)]">
+        <p className="text-xl font-semibold animate-pulse">결과를 준비 중입니다...</p>
+        <div className="mt-4 h-8 w-8 animate-spin rounded-full border-4 border-primary-500 border-t-transparent"></div>
+      </div>
+    }>
+      <ResultContent />
+    </Suspense>
   );
 };
 
