@@ -31,15 +31,19 @@ export default function RootLayout({
         <KakaoScriptLoader />
 
         {/* Google AdSense 스크립트 로드 */}
-        {/* 환경 변수에서 게시자 ID를 가져와 사용합니다. */}
-        {ADSENSE_PUBLISHER_ID && (
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3863791794986499"
+        crossOrigin="anonymous"></script>
+
+        {/* 환경변수ver */}
+        {/* {ADSENSE_PUBLISHER_ID && (
           <Script
             async
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_PUBLISHER_ID}`}
             crossOrigin="anonymous"
-            strategy="afterInteractive" // 페이지 상호작용 후 로드
+            strategy="afterInteractive" 
           />
-        )}
+        )} */}
+
         {!ADSENSE_PUBLISHER_ID && (
           <meta name="adsense-client-warning" content="NEXT_PUBLIC_ADSENSE_PUBLISHER_ID is not defined in environment variables." />
         )}
