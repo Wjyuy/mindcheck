@@ -49,6 +49,7 @@ const emotionDescriptions: Record<EmotionCategory, { title: string; description:
 declare global {
   interface Window {
     Kakao: any;
+    adsbygoogle: any[]; // AdSense를 위해 adsbygoogle 타입 추가
   }
 }
 
@@ -92,19 +93,42 @@ const ResultContent: React.FC = () => {
       setErrorMessage("힐링 문구 ID가 없습니다.");
     }
     setIsLoading(false);
-
-  // Google AdSense 광고 로드
-  try {
-    if (typeof window !== 'undefined') {
-      // @ts-ignore
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-      
-    }
-  } catch (e) {
-    console.error("AdSense push error:", e);
-  }
-
   }, [searchParams]);
+
+  // Google AdSense 광고 로드 로직
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 한 번만 실행되도록 합니다.
+    // StrictMode에서 두 번 실행될 수 있으므로, 이미 로드된 광고가 있는지 확인합니다.
+    const loadAds = () => {
+      try {
+        if (typeof window !== 'undefined' && window.adsbygoogle) {
+          // DOM에 adsbygoogle 클래스를 가진 ins 태그가 있고, 아직 처리되지 않았다면 push
+          const adElements = document.querySelectorAll('ins.adsbygoogle:not([data-ad-status="done"])');
+          if (adElements.length > 0) {
+            window.adsbygoogle.push({});
+            console.log("AdSense push called.");
+          } else {
+            console.log("No new AdSense 'ins' elements to push or already processed.");
+          }
+        }
+      } catch (e) {
+        console.error("AdSense push error:", e);
+      }
+    };
+
+    // 페이지가 로드되거나 컴포넌트가 마운트될 때 광고를 로드합니다.
+    // 딜레이를 주어 DOM이 완전히 준비될 시간을 줍니다.
+    const timer = setTimeout(loadAds, 100); // 짧은 딜레이 추가
+
+    // 클린업 함수 (컴포넌트 언마운트 시 또는 재렌더링 시)
+    return () => {
+      clearTimeout(timer);
+      // 필요하다면 여기서 광고 요소를 제거하거나 상태를 리셋할 수 있지만,
+      // adsbygoogle.push()는 일반적으로 한 번만 호출되는 것이 목적이므로,
+      // 중복 호출 방지에 더 집중합니다.
+    };
+  }, []); // 의존성 배열을 비워 컴포넌트 마운트 시 한 번만 실행되도록 합니다.
+
 
   // 로딩 중일 때 표시할 UI
   if (isLoading) {
@@ -304,6 +328,7 @@ const ResultContent: React.FC = () => {
         </Button>
       </div>
 
+      {/* Google AdSense 광고 배치  */}
       <div className="mt-12 w-full max-w-md rounded-lg bg-gray-100 p-4 text-center dark:bg-gray-700">
         
         <ins className="adsbygoogle"
