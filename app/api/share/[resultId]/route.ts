@@ -3,10 +3,11 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(
   request: NextRequest,
-  { params: awaitedParams }: { params: Promise<{ resultId: string }> | { resultId: string } } // params 타입을 Promise로도 받을 수 있도록 수정
+  // params의 타입을 Next.js의 표준 방식으로 다시 변경합니다.
+  // Next.js는 params 객체를 직접 전달하며, 내부적으로 동적 세그먼트 값을 처리합니다.
+  { params }: { params: { resultId: string } }
 ) {
-  // params 객체를 await하여 실제 값을 가져옵니다.
-  const params = await awaitedParams;
+  // params 객체는 Next.js에 의해 이미 준비되어 있으므로, 직접 await할 필요가 없습니다.
   const { resultId } = params;
   const body = await request.json(); // 요청 바디 파싱 (예: { platform: 'kakao' })
 
