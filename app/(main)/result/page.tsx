@@ -92,6 +92,17 @@ const ResultContent: React.FC = () => {
       setErrorMessage("힐링 문구 ID가 없습니다.");
     }
     setIsLoading(false);
+
+  // Google AdSense 광고 로드
+  try {
+    if (typeof window !== 'undefined') {
+      // @ts-ignore
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    }
+  } catch (e) {
+    console.error("AdSense push error:", e);
+  }
+
   }, [searchParams]);
 
   // 로딩 중일 때 표시할 UI
@@ -292,10 +303,17 @@ const ResultContent: React.FC = () => {
         </Button>
       </div>
 
-      {/* Google AdSense 광고 배치 (TODO: 실제 AdSense 코드 삽입) */}
-      <div className="mt-12 w-full max-w-md rounded-lg bg-gray-100 p-4 text-center text-gray-500 dark:bg-gray-700 dark:text-gray-400">
-        <p>광고 영역 (Google AdSense)</p>
-        {/* 실제 AdSense 코드 삽입 위치 */}
+      <div className="mt-12 w-full max-w-md rounded-lg bg-gray-100 p-4 text-center dark:bg-gray-700">
+        <ins
+          className="adsbygoogle"
+          style={{ display: 'block' }}
+          data-ad-client="ca-pub-YOUR_ADSENSE_PUBLISHER_ID" // <-- 실제 게시자 ID
+          data-ad-slot="YOUR_ADSENSE_AD_SLOT_ID"           // <-- 실제 광고 단위 ID
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        ></ins>
+        {/* 광고가 로드되지 않을 경우를 대비한 대체 텍스트 */}
+        <p className="text-gray-500 dark:text-gray-400">광고 영역</p>
       </div>
     </div>
   );
