@@ -1,16 +1,15 @@
 // app/api/share/[resultId]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
-// RouteContext 인터페이스는 더 이상 사용하지 않습니다.
-
 export async function POST(
   request: NextRequest,
-  // Next.js App Router의 Route Handler에서 params를 받는 가장 일반적인 방식입니다.
-  // 두 번째 인자에서 직접 params를 비구조화하고 인라인으로 타입을 정의합니다.
-  { params }: { params: { resultId: string } }
+  // Next.js 공식 문서에 따라 params를 Promise로 감싸진 객체로 받습니다.
+  { params }: { params: Promise<{ resultId: string }> }
 ) {
-  // params 객체는 Next.js에 의해 이미 준비되어 있으므로, 직접 await할 필요가 없습니다.
-  const { resultId } = params;
+  // params가 Promise이므로, 사용하기 전에 await 해야 합니다.
+  const awaitedParams = await params;
+  const { resultId } = awaitedParams;
+
   const body = await request.json(); // 요청 바디 파싱 (예: { platform: 'kakao' })
 
   // 실제 애플리케이션에서는:
