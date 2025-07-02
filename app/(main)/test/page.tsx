@@ -7,6 +7,7 @@ import useTestState from '@/lib/hooks/useTestState'; // 커스텀 훅 임포트
 import QuestionCard from '@/components/test/QuestionCard'; // QuestionCard 컴포넌트 임포트
 import ProgressBar from '@/components/test/ProgressBar'; // ProgressBar 컴포넌트 임포트
 import Button from '@/components/ui/Button'; // Button 컴포넌트 임포트
+import { getHealingMessage } from '@/lib/services/messageService'; // 힐링 메시지 추천 서비스 임포트
 
 /**
  * 심리테스트 페이지 컴포넌트
@@ -36,8 +37,17 @@ const TestPage: React.FC = () => {
     if (isTestCompleted && testResultEmotion) { // 테스트 완료 및 감정 결과가 있을 때만 리다이렉트
       console.log("Test Completed! User Answers:", userAnswers);
       console.log("Test Result Emotion:", testResultEmotion);
-      // 결과 페이지로 이동 시, 감정 결과를 쿼리 파라미터로 전달
-      router.push(`/result?emotion=${testResultEmotion}`);
+
+      // 감정 결과에 따라 힐링 메시지 추천
+      const recommendedMessage = getHealingMessage(testResultEmotion);
+
+      if (recommendedMessage) {
+        // 결과 페이지로 이동 시, 감정 결과와 추천 메시지 ID를 쿼리 파라미터로 전달
+        router.push(`/result?emotion=${testResultEmotion}&messageId=${recommendedMessage.id}`);
+      } else {
+        // 메시지를 찾지 못했을 경우 기본 결과 페이지 또는 에러 처리
+        router.push(`/result?emotion=${testResultEmotion}`);
+      }
     }
   }, [isTestCompleted, userAnswers, router, testResultEmotion]); // testResultEmotion을 의존성 배열에 추가
 
