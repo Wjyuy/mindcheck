@@ -1,11 +1,17 @@
 // app/api/share/[resultId]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
+// Next.js App Router의 Route Handler에서 params를 받는 정확한 타입을 정의합니다.
+// 이는 Next.js 내부 타입과 일치시키기 위한 일반적인 패턴입니다.
+interface RouteParams {
+  params: {
+    resultId: string;
+  };
+}
+
 export async function POST(
   request: NextRequest,
-  // params의 타입을 Next.js의 표준 방식으로 다시 변경합니다.
-  // Next.js는 params 객체를 직접 전달하며, 내부적으로 동적 세그먼트 값을 처리합니다.
-  { params }: { params: { resultId: string } }
+  { params }: RouteParams // 정의된 RouteParams 인터페이스를 사용합니다.
 ) {
   // params 객체는 Next.js에 의해 이미 준비되어 있으므로, 직접 await할 필요가 없습니다.
   const { resultId } = params;
