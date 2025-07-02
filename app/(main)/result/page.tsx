@@ -98,6 +98,7 @@ const ResultContent: React.FC = () => {
     if (typeof window !== 'undefined') {
       // @ts-ignore
       (window.adsbygoogle = window.adsbygoogle || []).push({});
+      
     }
   } catch (e) {
     console.error("AdSense push error:", e);
@@ -304,14 +305,13 @@ const ResultContent: React.FC = () => {
       </div>
 
       <div className="mt-12 w-full max-w-md rounded-lg bg-gray-100 p-4 text-center dark:bg-gray-700">
-        <ins
-          className="adsbygoogle"
+        
+        <ins className="adsbygoogle"
           style={{ display: 'block' }}
-          data-ad-client="ca-pub-YOUR_ADSENSE_PUBLISHER_ID" // <-- 실제 게시자 ID
-          data-ad-slot="YOUR_ADSENSE_AD_SLOT_ID"           // <-- 실제 광고 단위 ID
+          data-ad-client="ca-pub-3863791794986499"
+          data-ad-slot="3205621919"
           data-ad-format="auto"
-          data-full-width-responsive="true"
-        ></ins>
+          data-full-width-responsive="true"></ins>
         {/* 광고가 로드되지 않을 경우를 대비한 대체 텍스트 */}
         <p className="text-gray-500 dark:text-gray-400">광고 영역</p>
       </div>
