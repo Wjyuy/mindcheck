@@ -1,9 +1,9 @@
 // app/api/share/[resultId]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
-// Next.js App Router의 Route Handler에서 params를 받는 정확한 타입을 정의합니다.
-// 이는 Next.js 내부 타입과 일치시키기 위한 일반적인 패턴입니다.
-interface RouteParams {
+// Next.js Route Handler의 두 번째 인자(context)에 대한 타입을 명시적으로 정의합니다.
+// 이는 Next.js 내부적으로 기대하는 타입 구조와 일치시킵니다.
+interface RouteContext {
   params: {
     resultId: string;
   };
@@ -11,10 +11,10 @@ interface RouteParams {
 
 export async function POST(
   request: NextRequest,
-  { params }: RouteParams // 정의된 RouteParams 인터페이스를 사용합니다.
+  context: RouteContext // RouteContext 인터페이스를 사용하여 타입을 명시합니다.
 ) {
-  // params 객체는 Next.js에 의해 이미 준비되어 있으므로, 직접 await할 필요가 없습니다.
-  const { resultId } = params;
+  // context.params에서 resultId를 안전하게 비구조화합니다.
+  const { resultId } = context.params;
   const body = await request.json(); // 요청 바디 파싱 (예: { platform: 'kakao' })
 
   // 실제 애플리케이션에서는:
