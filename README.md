@@ -1,11 +1,11 @@
-# mindcheck
-Mindcheck is a detox healing phrase recommendation service, a web application that provides users with mental healing through dopamine detox in a modern society overflowing with hatred.
+# maumcheck
+maumcheck is a detox healing phrase recommendation service, a web application that provides users with mental healing through dopamine detox in a modern society overflowing with hatred.
 
 ## 📋 프로젝트 개요
 
 ### 프로젝트명
 
-도파민 디톡스 힐링 문구 추천 서비스
+도파민 디톡스 힐링 문구 추천 서비스 - 마음체크
 
 ### 컨셉
 
